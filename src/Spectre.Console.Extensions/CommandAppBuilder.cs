@@ -1,40 +1,111 @@
-using System;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using Spectre.Console.Cli;
+using Spectre.Console.Extensions.DependencyInjection;
+using System;
 
 namespace Spectre.Console.Extensions
 {
-    public class CommandAppBuilder
+    /// <summary>
+    /// Defines an entry point to build a <see cref="CommandApp"/> instance
+    /// </summary>
+    public sealed class CommandAppBuilder
     {
+        private ITypeRegistrar registrar;
+
         #region Constructor
         private CommandAppBuilder(IServiceCollection services)
         {
             Services = services ?? throw new ArgumentNullException(nameof(services));
-            Configuration = new ConfigurationManager();
+            registrar = new ServiceCollectionTypeRegistrar(Services);
         }
         #endregion
 
+        /// <summary>
+        /// Gets the <see cref="IServiceCollection"/> instance
+        /// </summary>
         public IServiceCollection Services { get; }
 
-        public IConfiguration Configuration { get; }
-
+        /// <summary>
+        /// Creates a new <see cref="CommandAppBuilder"/> instance
+        /// </summary>
+        /// <returns>The builder instance</returns>
         public static CommandAppBuilder Create()
         {
             var services = new ServiceCollection();
             return new CommandAppBuilder(services);
         }
 
+        /// <summary>
+        /// Overrides the default registrar implementation which uses the <see cref="IServiceCollection"/>
+        /// </summary>
+        /// <param name="registrar">The <see cref="ITypeRegistrar"/> instance</param>
+        /// <returns>The <see cref="CommandAppBuilder"/> itself</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public CommandAppBuilder WithTypeRegistrar(ITypeRegistrar registrar)
+        {
+            this.registrar = registrar ?? throw new ArgumentNullException(nameof(registrar));
+            return this;
+        }
+
+        /// <summary>
+        /// Creates the <see cref="CommandApp"/> instance
+        /// </summary>
+        /// <returns>The <see cref="CommandApp"/> instance</returns>
         public CommandApp Build()
         {
-            var app = new CommandApp();
+            var app = new CommandApp(registrar);
             return app;
         }
 
+        /// <summary>
+        /// Creates the <see cref="CommandApp"/> instance and applies the specified configuration
+        /// </summary>
+        /// <param name="configuration">The configuration of the app</param>
+        /// <returns>The <see cref="CommandApp"/> instance</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the configuration is null</exception>
+        public CommandApp Build(Action<IConfigurator> configuration)
+        {
+            if (configuration is null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
+            }
+
+            var app = Build();
+            app.Configure(configuration);
+
+            return app;
+        }
+
+        /// <summary>
+        /// Creates the <see cref="CommandApp{TDefaultCommand}"/> instance
+        /// </summary>
+        /// <typeparam name="TDefaultCommand">The default command type</typeparam>
+        /// <returns>The <see cref="CommandApp{TDefaultCommand}"/> instance</returns>
         public CommandApp<TDefaultCommand> Build<TDefaultCommand>()
             where TDefaultCommand : class, ICommand
         {
-            var app = new CommandApp<TDefaultCommand>();
+            var app = new CommandApp<TDefaultCommand>(registrar);
+            return app;
+        }
+
+        /// <summary>
+        /// Creates the <see cref="CommandApp{TDefaultCommand}"/> instance and applies the specified configuration
+        /// </summary>
+        /// <typeparam name="TDefaultCommand">The default command type</typeparam>
+        /// <param name="configuration">The configuration of the app</param>
+        /// <returns>The <see cref="CommandApp{TDefaultCommand}"/> instance</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public CommandApp<TDefaultCommand> Build<TDefaultCommand>(Action<IConfigurator> configuration)
+            where TDefaultCommand : class, ICommand
+        {
+            if (configuration is null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
+            }
+
+            var app = Build<TDefaultCommand>();
+            app.Configure(configuration);
+
             return app;
         }
     }
