@@ -7,25 +7,33 @@ namespace Spectre.Console.Extensions.DependencyInjection
     /// <summary>
     /// Implements <see cref="ITypeRegistrar"/> to enable Dependency Injection
     /// </summary>
-    public class ServiceCollectionTypeRegistrar : ITypeRegistrar
+    internal sealed class ServiceCollectionTypeRegistrar : ITypeRegistrar
     {
         private readonly IServiceCollection services;
+
+        private readonly IServiceProviderFactory<IServiceCollection> serviceProviderFactory;
 
         /// <summary>
         /// Constructs the object
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> instance</param>
+        /// <param name="serviceProviderFactory">The service provider factory instance</param>
         /// <exception cref="ArgumentNullException">Thrown if service collection instance is null</exception>
-        public ServiceCollectionTypeRegistrar(IServiceCollection services)
+        public ServiceCollectionTypeRegistrar(IServiceCollection services, IServiceProviderFactory<IServiceCollection> serviceProviderFactory)
         {
             this.services = services ?? throw new ArgumentNullException(nameof(services));
+            this.serviceProviderFactory = serviceProviderFactory ?? throw new ArgumentNullException(nameof(serviceProviderFactory));
         }
 
         /// <summary>
         /// Builds the <see cref="ITypeResolver"/> instance
         /// </summary>
         /// <returns>The created <see cref="ITypeResolver"/> instance</returns>
-        public virtual ITypeResolver Build() => new ServiceProviderTypeResolver(services.BuildServiceProvider());
+        public ITypeResolver Build()
+        {
+            var serviceProvider = serviceProviderFactory.CreateServiceProvider(services);
+            return new ServiceProviderTypeResolver(serviceProvider);
+        }
 
         /// <summary>
         /// Registers the specified service's type to the implementation's type

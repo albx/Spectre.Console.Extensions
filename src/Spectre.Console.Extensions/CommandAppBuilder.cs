@@ -10,13 +10,13 @@ namespace Spectre.Console.Extensions
     /// </summary>
     public sealed class CommandAppBuilder
     {
-        private ITypeRegistrar registrar;
+        private IServiceProviderFactory<IServiceCollection> serviceProviderFactory;
 
         #region Constructor
         private CommandAppBuilder(IServiceCollection services)
         {
             Services = services ?? throw new ArgumentNullException(nameof(services));
-            registrar = new ServiceCollectionTypeRegistrar(Services);
+            serviceProviderFactory = new DefaultServiceProviderFactory();
         }
         #endregion
 
@@ -36,14 +36,12 @@ namespace Spectre.Console.Extensions
         }
 
         /// <summary>
-        /// Overrides the default registrar implementation which uses the <see cref="IServiceCollection"/>
+        /// Set the specified service provider factory instance
         /// </summary>
-        /// <param name="registrar">The <see cref="ITypeRegistrar"/> instance</param>
-        /// <returns>The <see cref="CommandAppBuilder"/> itself</returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public CommandAppBuilder WithTypeRegistrar(ITypeRegistrar registrar)
+        /// <returns>The builder instance</returns>
+        public CommandAppBuilder UseServiceProviderFactory(IServiceProviderFactory<IServiceCollection> serviceProviderFactory)
         {
-            this.registrar = registrar ?? throw new ArgumentNullException(nameof(registrar));
+            this.serviceProviderFactory = serviceProviderFactory ?? throw new ArgumentNullException(nameof(serviceProviderFactory));
             return this;
         }
 
@@ -53,6 +51,8 @@ namespace Spectre.Console.Extensions
         /// <returns>The <see cref="CommandApp"/> instance</returns>
         public CommandApp Build()
         {
+            var registrar = new ServiceCollectionTypeRegistrar(Services, serviceProviderFactory);
+
             var app = new CommandApp(registrar);
             return app;
         }
@@ -84,6 +84,8 @@ namespace Spectre.Console.Extensions
         public CommandApp<TDefaultCommand> Build<TDefaultCommand>()
             where TDefaultCommand : class, ICommand
         {
+            var registrar = new ServiceCollectionTypeRegistrar(Services, serviceProviderFactory);
+
             var app = new CommandApp<TDefaultCommand>(registrar);
             return app;
         }
