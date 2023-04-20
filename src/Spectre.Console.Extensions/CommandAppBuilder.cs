@@ -36,7 +36,7 @@ namespace Spectre.Console.Extensions
         }
 
         /// <summary>
-        /// Set the specified service provider factory instance
+        /// Set the specified <see cref="IServiceProviderFactory{TContainerBuilder}"/> instance
         /// </summary>
         /// <returns>The builder instance</returns>
         public CommandAppBuilder UseServiceProviderFactory(IServiceProviderFactory<IServiceCollection> serviceProviderFactory)

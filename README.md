@@ -14,7 +14,7 @@ It can be installed using the ```dotnet add package``` command or the NuGet wiza
   dotnet add package Spectre.Console.Extensions
 ```
     
-## Usage/Examples
+## Usage
 
 In your ```Program.cs``` you can create a ```CommandAppBuilder``` class and then register your services:
 
@@ -26,8 +26,30 @@ var builder = CommandAppBuilder.Create();
 //Register your services with the Services property. i.e.
 builder.Services.AddSingleton(....);
 
+//Create the CommandApp instance
 var app = builder.Build();
+app.Configure(config => { /* your app configuration */ });
+
+//Create the CommandApp instance with its default command
+var app = builder.Build<DefaultCommand>();
 app.Configure(config => { /* your app configuration */ });
 
 return app.Run(args);
 ```
+
+It's possibile to specify the app configration in the overloads of the Build and Build&lt;TDefaultCommandMethod&gt;:
+```csharp
+// ...
+
+//Create the CommandApp instance
+var app = builder.Build(config => { /* your app configuration */ });
+
+//Create the CommandApp instance with its default command
+var app = builder.Build<DefaultCommand>(config => { /* your app configuration */ });
+
+// ...
+```
+
+## Samples
+
+Samples are located in the [samples](./samples) folder.

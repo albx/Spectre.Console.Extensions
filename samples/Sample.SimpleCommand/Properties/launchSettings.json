@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Sample.SimpleCommand": {
+      "commandName": "Project",
+      "commandLineArgs": "sample test"
+    }
+  }
+}

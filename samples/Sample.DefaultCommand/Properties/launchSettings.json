@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Sample.DefaultCommand": {
+      "commandName": "Project",
+      "commandLineArgs": "-n test"
+    }
+  }
+}

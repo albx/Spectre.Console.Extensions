@@ -17,7 +17,7 @@ namespace Spectre.Console.Extensions.DependencyInjection
         /// Constructs the object
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> instance</param>
-        /// <param name="serviceProviderFactory">The service provider factory instance</param>
+        /// <param name="serviceProviderFactory">The <see cref="IServiceProviderFactory{TContainerBuilder}"/> instance</param>
         /// <exception cref="ArgumentNullException">Thrown if service collection instance is null</exception>
         public ServiceCollectionTypeRegistrar(IServiceCollection services, IServiceProviderFactory<IServiceCollection> serviceProviderFactory)
         {
