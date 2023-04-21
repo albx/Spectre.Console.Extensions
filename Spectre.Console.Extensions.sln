@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spectre.Console.Extensions"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{71092FC3-AD0F-43F0-9EE4-93EB4974169C}"
 	ProjectSection(SolutionItems) = preProject
+		CONTRIBUTING.md = CONTRIBUTING.md
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -16,9 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{A50E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.SimpleCommand", "samples\Sample.SimpleCommand\Sample.SimpleCommand.csproj", "{7D21B514-76AC-4BC3-A2C1-2D20B5F11FFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Services", "samples\Sample.Services\Sample.Services.csproj", "{F6F0D605-9A87-4C96-AD49-9B8B23BF0B29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Services", "samples\Sample.Services\Sample.Services.csproj", "{F6F0D605-9A87-4C96-AD49-9B8B23BF0B29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.DefaultCommand", "samples\Sample.DefaultCommand\Sample.DefaultCommand.csproj", "{40DDB361-2E7A-47B7-AD61-B22C1849CFAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.DefaultCommand", "samples\Sample.DefaultCommand\Sample.DefaultCommand.csproj", "{40DDB361-2E7A-47B7-AD61-B22C1849CFAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

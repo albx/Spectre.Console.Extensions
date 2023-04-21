@@ -53,3 +53,9 @@ var app = builder.Build<DefaultCommand>(config => { /* your app configuration */
 ## Samples
 
 Samples are located in the [samples](./samples) folder.
+
+## Contributing
+
+Contributions are always welcome!
+
+If you want to submit any issues or new features, please [follow these few guidelines](CONTRIBUTING.md).
