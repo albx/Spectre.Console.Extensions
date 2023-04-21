@@ -5,7 +5,7 @@
     <Title>Spectre.Console Extensions</Title>
 	<Description>This package contains some extensions for the Spectre.Console project, such as CommandAppBuilder and DependencyInjection implementation</Description>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<PackageId>Spectre.Console.Extensions</PackageId>
+	<PackageId>SpectreConsole.Extensions</PackageId>
 	<Authors>Alberto Mori</Authors>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<Version>0.1.0</Version>
@@ -13,7 +13,7 @@
 	<RepositoryUrl>https://github.com/albx/Spectre.Console.Extensions</RepositoryUrl>
 	<PackageTags>spectreconsole;dotnet;dependency injection</PackageTags>
 	<PackageProjectUrl>https://github.com/albx/Spectre.Console.Extensions</PackageProjectUrl>
-	<PackagerReadmeFile>README.md</PackagerReadmeFile>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
