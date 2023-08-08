@@ -6,12 +6,12 @@ It adds a CommandAppBuilder which enables features like Dependency injection.
 
 ## Installation
 
-This project is available on NuGet.
+This project is available on [NuGet](https://www.nuget.org/packages/SpectreConsole.Extensions/).
 
 It can be installed using the ```dotnet add package``` command or the NuGet wizard on your favourite IDE.
 
 ```bash
-  dotnet add package Spectre.Console.Extensions
+  dotnet add package SpectreConsole.Extensions
 ```
     
 ## Usage
