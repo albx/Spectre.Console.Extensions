@@ -3,6 +3,10 @@
 This project contains some extensions for the Spectre.Console CLI project.
 It adds a CommandAppBuilder which enables features like Dependency injection.
 
+## Requirements
+
+The project supports .NET Standard 2.0 and .NET 8.0.
+
 
 ## Installation
 
