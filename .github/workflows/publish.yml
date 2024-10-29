@@ -1,0 +1,34 @@
+name: Publish to NuGet
+
+on:
+  push:
+    branches: [ 'main' ]
+    paths: 
+    - 'src/Spectre.Console.Extensions/**'
+  workflow_dispatch:
+
+env:
+  NET_VERSION: '8.x'
+  PROJECT_PATH: 'src/Spectre.Console.Extensions'
+  PROJECT_FILE: 'Spectre.Console.Extensions.csproj'
+
+jobs:
+  publish:
+    name: Publish package to NuGet
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with: 
+        fetch-depth: 0
+    
+    - name: Setup .NET SDK ${{ env.NET_VERSION }}
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.NET_VERSION }}
+
+    - name: Create nupkg file
+      run: dotnet pack -c Release -o . '${{ env.PROJECT_PATH }}/${{ env.PROJECT_FILE }}'
+
+    - name: Publish on NuGet
+      run: dotnet nuget push *.nupkg -k ${{ secrets.NUGET_APIKEY }} -s https://api.nuget.org/v3/index.json
