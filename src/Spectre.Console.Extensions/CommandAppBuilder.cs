@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 using Spectre.Console.Extensions.DependencyInjection;
@@ -17,6 +18,8 @@ namespace Spectre.Console.Extensions
         {
             Services = services ?? throw new ArgumentNullException(nameof(services));
             serviceProviderFactory = new DefaultServiceProviderFactory();
+
+            SetupConfiguration();
         }
         #endregion
 
@@ -24,6 +27,8 @@ namespace Spectre.Console.Extensions
         /// Gets the <see cref="IServiceCollection"/> instance
         /// </summary>
         public IServiceCollection Services { get; }
+
+        public ConfigurationManager Configuration { get; } = new ConfigurationManager();
 
         /// <summary>
         /// Creates a new <see cref="CommandAppBuilder"/> instance
@@ -110,5 +115,15 @@ namespace Spectre.Console.Extensions
 
             return app;
         }
+
+        #region Private method
+        private void SetupConfiguration()
+        {
+            Configuration.AddEnvironmentVariables("DOTNET_");
+            Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            Configuration.AddEnvironmentVariables();
+        }
+        #endregion
     }
 }
