@@ -8,7 +8,7 @@
     <PackageId>SpectreConsole.Extensions</PackageId>
     <Authors>Alberto Mori</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/albx/Spectre.Console.Extensions</RepositoryUrl>
     <PackageTags>spectreconsole;dotnet;dependency injection</PackageTags>
@@ -23,6 +23,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
