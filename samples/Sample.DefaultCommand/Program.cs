@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Sample.Services;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -8,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 var builder = CommandAppBuilder.Create();
 
 builder.Services.AddSingleton<IMyService, MyService>();
+builder.Services.Configure<MyOption>(builder.Configuration.GetSection(nameof(MyOption)));
 
 try
 {
@@ -33,12 +35,15 @@ catch (Exception ex)
 
 internal class MyCommand : Command<MyCommand.CommandSettings>
 {
-    public MyCommand(IMyService service)
+    public MyCommand(IMyService service, IOptions<MyOption> options)
     {
         Service = service ?? throw new ArgumentNullException(nameof(service));
+        Option = options.Value;
     }
 
     public IMyService Service { get; }
+
+    public MyOption Option { get; }
 
     public override int Execute([NotNull] CommandContext context, [NotNull] CommandSettings settings)
     {
@@ -46,6 +51,7 @@ internal class MyCommand : Command<MyCommand.CommandSettings>
         {
             AnsiConsole.MarkupLine($"Argument: {settings.Name}");
             AnsiConsole.MarkupLine($"Service: {Service.SayHello()}");
+            AnsiConsole.MarkupLine($"Option: {Option.Value}");
 
             return 0;
         }
@@ -61,4 +67,9 @@ internal class MyCommand : Command<MyCommand.CommandSettings>
         [CommandOption("-n|--name")]
         public string Name { get; set; } = string.Empty;
     }
+}
+
+public record MyOption
+{
+    public string Value { get; set; } = string.Empty;
 }

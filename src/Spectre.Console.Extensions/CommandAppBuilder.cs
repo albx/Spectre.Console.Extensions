@@ -1,6 +1,9 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Spectre.Console.Cli;
 using Spectre.Console.Extensions.DependencyInjection;
+using Spectre.Console.Extensions.Internals;
 using System;
 
 namespace Spectre.Console.Extensions
@@ -17,6 +20,12 @@ namespace Spectre.Console.Extensions
         {
             Services = services ?? throw new ArgumentNullException(nameof(services));
             serviceProviderFactory = new DefaultServiceProviderFactory();
+
+            ConfigurationHelper.ApplyDefaultConfiguration(Configuration);
+            Environment = ConfigurationHelper.BuildEnvironment(Configuration);
+            ConfigurationHelper.ApplyDefaultAppConfiguration(Configuration, Environment);
+
+            Services.AddSingleton<IConfiguration>(Configuration);
         }
         #endregion
 
@@ -24,6 +33,16 @@ namespace Spectre.Console.Extensions
         /// Gets the <see cref="IServiceCollection"/> instance
         /// </summary>
         public IServiceCollection Services { get; }
+
+        /// <summary>
+        /// Gets the <see cref="Microsoft.Extensions.Configuration.IConfiguration"/> instance
+        /// </summary>
+        public ConfigurationManager Configuration { get; } = new ConfigurationManager();
+
+        /// <summary>
+        /// Gets the <see cref="IHostEnvironment"/> instance
+        /// </summary>
+        public IHostEnvironment Environment { get; }
 
         /// <summary>
         /// Creates a new <see cref="CommandAppBuilder"/> instance
@@ -51,7 +70,7 @@ namespace Spectre.Console.Extensions
         /// <returns>The <see cref="CommandApp"/> instance</returns>
         public CommandApp Build()
         {
-            var registrar = new ServiceCollectionTypeRegistrar(Services, serviceProviderFactory);
+            var registrar = BuildTypeRegistrar();
 
             var app = new CommandApp(registrar);
             return app;
@@ -84,7 +103,7 @@ namespace Spectre.Console.Extensions
         public CommandApp<TDefaultCommand> Build<TDefaultCommand>()
             where TDefaultCommand : class, ICommand
         {
-            var registrar = new ServiceCollectionTypeRegistrar(Services, serviceProviderFactory);
+            var registrar = BuildTypeRegistrar();
 
             var app = new CommandApp<TDefaultCommand>(registrar);
             return app;
@@ -110,5 +129,15 @@ namespace Spectre.Console.Extensions
 
             return app;
         }
+
+        #region Private method
+        private ServiceCollectionTypeRegistrar BuildTypeRegistrar()
+        {
+            Services.AddSingleton(serviceProviderFactory.CreateServiceProvider(Services));
+            var registrar = new ServiceCollectionTypeRegistrar(Services, serviceProviderFactory);
+
+            return registrar;
+        }
+        #endregion
     }
 }
